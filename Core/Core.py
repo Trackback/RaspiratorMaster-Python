@@ -17,10 +17,9 @@ class Core:
         pass
 
     def boot(self):
-        sock.connect("localhost", 9091)
+        sock.start("localhost", 9091)
         console.catch(self.sendCommand)
-
-
+        sock.loop()
 
     def sendCommand(self, command):
         sock.say(command)

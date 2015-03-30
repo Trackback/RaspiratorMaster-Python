@@ -1,38 +1,31 @@
 __author__ = 'trackback'
-import socket
-from Loger import  Loger
+
+import asyncore, socket
+from Loger import Loger
 debug = Loger.Loger()
 tag = "Client"
-MSGLEN = 1024
 
 
-class SocketClient:
-    def __init__(self, sock=None):
-        if sock is None:
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        else:
-            self.sock = sock
-        self.conn = False
+class SocketClient(asyncore.dispatcher):
+    def __init__(self):
+        pass
 
-    def connect(self, host, port):
-        self.conn = True
-        self.sock.connect((host, port))
+    def start(self, host, port):
+        asyncore.dispatcher.__init__(self)
+        self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connect((host, port))
+        self.out_buffer = "123"
 
-    def say(self, msg):
-        if self.conn is True:
-            debug.i(tag, "Sending: "+msg)
-            self.sock.send(bytes(msg, "UTF-8"))
-        else:
-            debug.i(tag, "Connection is not establishment")
+    def handle_close(self):
+        self.close()
 
-    def receive(self):
-        while True:
-            data = self.sock.recv(1024)
-            if not data:
-                debug.i(tag, 11)
-                break
-            data = data.decode("utf-8")
-            debug.i(tag, data)
+    def handle_read(self):
+        debug.i(tag, 'Received' + self.recv(1024).decode("UTF-8"))
+        #self.close()
 
-    def close(self):
-        self.sock.close()
+    def say(self, data):
+        #self.out_buffer = data
+        self.send(bytes(data, "UTF-8"))
+
+    def loop(self):
+        asyncore.loop()
