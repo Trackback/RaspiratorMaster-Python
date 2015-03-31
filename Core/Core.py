@@ -18,7 +18,7 @@ class Core:
 
     def boot(self):
         sock.start("localhost", 9091)
-        console.catch(self.sendCommand)
+        #console.catch(self.sendCommand)
         sock.loop()
 
     def sendCommand(self, command):

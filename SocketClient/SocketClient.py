@@ -1,31 +1,48 @@
 __author__ = 'trackback'
 
-import asyncore, socket
+import asynchat
+import asyncore
+import socket
+import threading
 from Loger import Loger
 debug = Loger.Loger()
 tag = "Client"
 
 
-class SocketClient(asyncore.dispatcher):
+class SocketClient(asynchat.async_chat):
     def __init__(self):
         pass
 
     def start(self, host, port):
-        asyncore.dispatcher.__init__(self)
+        asynchat.async_chat.__init__(self)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connect((host, port))
-        self.out_buffer = "123"
 
-    def handle_close(self):
-        self.close()
+        self.set_terminator('\n')
+        self.buffer = []
+
+    def collect_incoming_data(self, data):
+        #pass
+        self.buffer.append(data)
+
+    def found_terminator(self):
+        #pass
+        msg = ''.join(self.buffer)
+        debug.i(tag, 'Received:' + msg)
+        self.buffer = []
 
     def handle_read(self):
-        debug.i(tag, 'Received' + self.recv(1024).decode("UTF-8"))
-        #self.close()
-
-    def say(self, data):
-        #self.out_buffer = data
-        self.send(bytes(data, "UTF-8"))
+        data = self.recv(1024)
+        if data is None:
+            return
+        data = data.decode("UTF-8")
+        debug.i("", data)
 
     def loop(self):
-        asyncore.loop()
+        comm = threading.Thread(target=asyncore.loop)
+        comm.daemon = True
+        comm.start()
+
+        while True:
+            msg = input('> ')
+            self.push(bytes(msg, "UTF-8"))
