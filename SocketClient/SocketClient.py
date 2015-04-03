@@ -5,7 +5,7 @@ import asyncore
 import socket
 import threading
 from Loger import Loger
-debug = Loger.Loger()
+debug = Loger()
 tag = "Client"
 
 

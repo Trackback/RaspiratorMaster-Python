@@ -1,11 +1,9 @@
 __author__ = 'trackback'
 
 from SocketClient import SocketClient
-from Loger import Loger
-from GUI import GUI
 
-sock = SocketClient.SocketClient()
-gui = GUI.GUI()
+
+sock = SocketClient()
 
 class Core:
     def __init__(self):
