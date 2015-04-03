@@ -1,4 +1,5 @@
 # RaspiratorMaster-Python
+Required Python 3.x!
 
 RaspiratorMaster [Python port]
 
