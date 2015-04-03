@@ -5,7 +5,7 @@ import asyncore
 import socket
 import threading
 from Loger import Loger
-debug = Loger()
+debug = Loger.Loger()
 tag = "Client"
 
 
@@ -44,5 +44,5 @@ class SocketClient(asynchat.async_chat):
         comm.start()
 
         while True:
-            msg = input('> ')
+            msg = input('Input command: ')
             self.push(bytes(msg, "UTF-8"))

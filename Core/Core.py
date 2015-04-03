@@ -3,7 +3,7 @@ __author__ = 'trackback'
 from SocketClient import SocketClient
 
 
-sock = SocketClient()
+sock = SocketClient.SocketClient()
 
 class Core:
     def __init__(self):

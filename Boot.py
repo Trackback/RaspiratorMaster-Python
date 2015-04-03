@@ -4,8 +4,8 @@ from Loger import Loger
 from Core import Core
 
 tag = "Boot"
-debug = Loger()
-core = Core()
+debug = Loger.Loger()
+core = Core.Core()
 
 debug.i(tag, "Initing")
 core.boot()
